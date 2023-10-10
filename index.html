@@ -7,7 +7,7 @@
     <title>Aamir Mushtaq Resume</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Public/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </head>
 <body>    
     <div class="container">
@@ -66,38 +66,25 @@
     </div> 
 
     <script>
-        document.getElementById('download-pdf-button').addEventListener('click', function () {
-            const container = document.querySelector('.container');
-            const pdfOptions = {
-                margin: 10,
-                filename: 'Aamir_Mushtaq_Resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Create a PDF instance
-            const pdf = new jsPDF(pdfOptions.jsPDF);
-
-            // Function to handle the PDF generation
-            const generatePDF = () => {
-                pdf.html(container, pdfOptions).then(() => {
-                    // Save the PDF
-                    pdf.save(pdfOptions.filename);
-                });
-            };
-
-            // Check if html2pdf is available, and use it if it is, otherwise, use jsPDF directly
-            if (typeof html2pdf !== 'undefined') {
-                html2pdf().from(container).set(pdfOptions).outputPdf().then((pdfDoc) => {
-                    const blob = new Blob([pdfDoc], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    window.open(url);
-                });
-            } else {
-                generatePDF();
-            }
-        });
-    </script>
+      document.getElementById('download-pdf-button').addEventListener('click', function () {
+          const container = document.querySelector('.container');
+  
+          // Set options for PDF generation
+          const pdfOptions = {
+              margin: 10,
+              filename: 'Aamir_Mushtaq_Resume.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2 },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+  
+          // Generate PDF using html2pdf.js
+          html2pdf().from(container).set(pdfOptions).outputPdf().then(function (pdf) {
+              // Save the PDF or open it in a new tab
+              pdf.save();
+          });
+      });
+  </script>
+  
 </body>
 </html>
