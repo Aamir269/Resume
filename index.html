@@ -7,6 +7,7 @@
     <title>Aamir Mushtaq Resume</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Public/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js"></script>
 </head>
 <body>    
     <div class="container">
@@ -19,7 +20,7 @@
             <p>"I'm a passionate Full Stack Web Developer with a background in AWS architecture, dedicated to creating user-centric digital experiences through a blend of creativity and code."</p>
 
             <!-- Add the download button here -->
-            <a href="https://aamir-mushtaq-resume.netlify.app/" download="Aamir_Mushtaq_Resume.pdf" class="download-button">Download Resume</a>
+            <button id="download-pdf-button">Download Resume as PDF</button>
         </div>
 
         <div class="main">
@@ -63,5 +64,26 @@
             </div>
         </div>
     </div> 
+
+    <script>
+        document.getElementById('download-pdf-button').addEventListener('click', function () {
+            const container = document.querySelector('.container');
+            const pdfOptions = {
+                margin: 10,
+                filename: 'Aamir_Mushtaq_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(container).set(pdfOptions).outputPdf().then(function (pdf) {
+                const blob = new Blob([pdf], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'Aamir_Mushtaq_Resume.pdf';
+                link.click();
+            });
+        });
+    </script>
 </body>
 </html>
