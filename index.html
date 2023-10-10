@@ -7,7 +7,7 @@
     <title>Aamir Mushtaq Resume</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Public/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>    
     <div class="container">
@@ -76,13 +76,27 @@
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().from(container).set(pdfOptions).outputPdf().then(function (pdf) {
-                const blob = new Blob([pdf], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = 'Aamir_Mushtaq_Resume.pdf';
-                link.click();
-            });
+            // Create a PDF instance
+            const pdf = new jsPDF(pdfOptions.jsPDF);
+
+            // Function to handle the PDF generation
+            const generatePDF = () => {
+                pdf.html(container, pdfOptions).then(() => {
+                    // Save the PDF
+                    pdf.save(pdfOptions.filename);
+                });
+            };
+
+            // Check if html2pdf is available, and use it if it is, otherwise, use jsPDF directly
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().from(container).set(pdfOptions).outputPdf().then((pdfDoc) => {
+                    const blob = new Blob([pdfDoc], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    window.open(url);
+                });
+            } else {
+                generatePDF();
+            }
         });
     </script>
 </body>
